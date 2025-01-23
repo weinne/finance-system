@@ -1,0 +1,24 @@
+{
+    "name": "Church Finance System",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "forwardPorts": [8080, 5432],
+    "customizations": {
+      "vscode": {
+        "settings": {
+          "terminal.integrated.shell.linux": "/bin/bash"
+        },
+      "vscode": {
+        "extensions": [
+          "vscjava.vscode-java-pack",
+          "vmware.vscode-boot-dev-pack",
+          "ms-azuretools.vscode-docker",
+          "vscjava.vscode-lombok",
+          "ms-ossdata.vscode-postgresql"
+        ]
+      }
+    },
+    "postCreateCommand": "mvn clean install -DskipTests"
+  }
+}
