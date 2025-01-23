@@ -2,17 +2,18 @@ version: '3.8'
 
 services:
   app:
-    build:
-      context: ..
-      dockerfile: .devcontainer/Dockerfile
+    image: mcr.microsoft.com/devcontainers/java:1-17
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
     volumes:
-      - ..:/workspace:cached
-    command: sleep infinity
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - church-network
     depends_on:
       postgres:
         condition: service_healthy
+    # Configuração para clonar o repositório
+    command: sleep infinity
 
   postgres:
     image: postgres:15-alpine
@@ -22,8 +23,6 @@ services:
       POSTGRES_PASSWORD: admin
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     networks:
       - church-network
     healthcheck:
