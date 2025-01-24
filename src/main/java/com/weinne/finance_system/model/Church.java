@@ -26,10 +26,11 @@ public class Church {
     @Column(name = "schema_name", nullable = false, unique = true)
     private String schemaName;  // Ex: church_123
 
+    @Column(name = "created_at", updatable = false)
     @CreationTimestamp
-    @Column(updatable = false)
     private LocalDateTime createdAt;
 
+    @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }
