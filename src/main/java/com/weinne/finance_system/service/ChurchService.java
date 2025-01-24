@@ -11,14 +11,21 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class ChurchService {
-    
+
     private final ChurchRepository churchRepository;
-    
+    private final TenantMigrationService tenantMigrationService;
+
     @Transactional
     public Church createChurch(Church church) {
         if (churchRepository.existsBySchemaName(church.getSchemaName())) {
-            throw new IllegalArgumentException("Schema já está em uso");
+            throw new IllegalArgumentException("Schema já existe");
         }
-        return churchRepository.save(church);
+
+        Church savedChurch = churchRepository.save(church);
+        
+        // Cria schema e aplica migrações
+        tenantMigrationService.migrateTenantSchema(church.getSchemaName());
+        
+        return savedChurch;
     }
 }
