@@ -1,4 +1,4 @@
-package com.weinne.finance_system.config;
+package com.weinne.finance_system.infrastructure.multitenancy.config;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -8,6 +8,16 @@ import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 
+/**
+ * SchemaPerTenantConnectionProvider is a MultiTenantConnectionProvider implementation
+ * that provides connections to different schemas based on the tenant identifier.
+ * 
+ * This class is annotated with @Component to be managed by Spring's dependency injection.
+ * It uses a DataSource to obtain connections and sets the schema for each connection
+ * based on the provided tenant identifier.
+ * 
+ * @param dataSource the DataSource used to obtain connections
+ */
 @Component
 public class SchemaPerTenantConnectionProvider implements MultiTenantConnectionProvider<String> {
     

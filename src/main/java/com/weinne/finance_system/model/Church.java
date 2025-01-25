@@ -1,21 +1,21 @@
 package com.weinne.finance_system.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-import java.time.LocalDateTime;
+import com.weinne.finance_system.infrastructure.multitenancy.annotation.TenantClassEntity;
+import com.weinne.finance_system.infrastructure.multitenancy.interfaces.TenantAware;
 
-@Data
+import jakarta.persistence.*;
+import lombok.Data;
+
 @Entity
-@Table(name = "igrejas")
-public class Church {
-    
+@Table
+@Data
+@TenantClassEntity(schemaNameField = "schemaName", tenantIdField = "id")
+public class Church implements TenantAware<Long> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false, unique = true)
@@ -23,14 +23,6 @@ public class Church {
 
     private String address;
 
-    @Column(name = "schema_name", nullable = false, unique = true)
-    private String schemaName;  // Ex: church_123
-
-    @Column(name = "created_at", updatable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    @Column(nullable = false, unique = true)
+    private String schemaName;
 }

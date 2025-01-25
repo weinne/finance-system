@@ -1,7 +1,9 @@
-package com.weinne.finance_system.config;
+package com.weinne.finance_system.infrastructure.multitenancy.config;
 
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 import org.springframework.stereotype.Component;
+
+import com.weinne.finance_system.infrastructure.multitenancy.context.TenantContext;
 
 @Component
 public class TenantIdentifierResolver implements CurrentTenantIdentifierResolver<String> {

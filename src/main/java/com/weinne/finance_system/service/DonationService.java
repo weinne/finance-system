@@ -1,9 +1,11 @@
 package com.weinne.finance_system.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.weinne.finance_system.config.TenantContext;
+import com.weinne.finance_system.exception.ResourceNotFoundException;
 import com.weinne.finance_system.model.Donation;
 import com.weinne.finance_system.repos.DonationRepository;
 
@@ -16,31 +18,24 @@ public class DonationService {
     private final DonationRepository donationRepository;
 
     @Transactional
-	public Donation createDonation(Donation donation, String tenantId) {
-        // Set the tenant context
-        TenantContext.setCurrentTenant(tenantId);
-
-        // Save the donation
-        Donation savedDonation = donationRepository.save(donation);
-
-        // Clear the tenant context
-        TenantContext.clear();
-
-        return savedDonation;
-	}
+    public Donation createDonation(Donation donation) {
+        return donationRepository.save(donation);
+    }
 
     @Transactional(readOnly = true)
-    public Iterable<Donation> listDonations(String tenantId) {
-        // Set the tenant context
-        TenantContext.setCurrentTenant(tenantId);
+    public List<Donation> listDonations() {
+        return donationRepository.findAll();
+    }
 
-        // List the donations
-        Iterable<Donation> donations = donationRepository.findAll();
+    @Transactional(readOnly = true)
+    public Donation getDonationById(Long id) {
+        return donationRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Doação não encontrada"));
+    }
 
-        // Clear the tenant context
-        TenantContext.clear();
-
-        return donations;
+    @Transactional
+    public void deleteDonation(Long id) {
+        donationRepository.deleteById(id);
     }
 
 }

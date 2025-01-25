@@ -1,4 +1,4 @@
-package com.weinne.finance_system.config;
+package com.weinne.finance_system.infrastructure.multitenancy.context;
 
 public class TenantContext {
     

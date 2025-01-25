@@ -5,9 +5,12 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.weinne.finance_system.infrastructure.multitenancy.annotation.TenantDependent;
+
 @Data
 @Entity
-@Table(name = "gastos")
+@Table
+@TenantDependent
 public class Expense {
     
     @Id
@@ -22,15 +25,19 @@ public class Expense {
 
     private String supplier;  // Ex: "Construtora ABC"
 
-    private String category;
+    private ExpenseCategory category;
 
     @Enumerated(EnumType.STRING)
     private ApprovalStatus status = ApprovalStatus.PENDENTE;
 
-    @Column(name = "invoice_url")
-    private String invoiceUrl;  // URL do S3/Azure Blob
+    @Lob
+    @Column(columnDefinition = "BYTEA")
+    private byte[] attachment;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "church_id", nullable = false)
-    private Church church;
+    public void setAttachment(byte[] attachment) {
+        if (attachment != null && attachment.length > 5 * 1024 * 1024) {
+            throw new IllegalArgumentException("Attachment size exceeds the maximum limit of 5MB");
+        }
+        this.attachment = attachment;
+    }
 }

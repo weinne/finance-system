@@ -71,7 +71,7 @@ Sistema SaaS multitenant para gestão financeira de igrejas, com foco em transpa
 ## Stack Tecnológica
 
 ### Backend
-- Java 17 + Spring Boot 3.3
+- Java 21 + Spring Boot 3.3
 - PostgreSQL (Multitenancy por schema)
 - Flyway (migrações de banco)
 - Spring Security + Keycloak

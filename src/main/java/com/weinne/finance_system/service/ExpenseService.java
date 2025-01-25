@@ -3,7 +3,7 @@ package com.weinne.finance_system.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.weinne.finance_system.config.TenantContext;
+import com.weinne.finance_system.infrastructure.multitenancy.context.TenantContext;
 import com.weinne.finance_system.model.Expense;
 import com.weinne.finance_system.repos.ExpenseRepository;
 

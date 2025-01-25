@@ -5,9 +5,12 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.weinne.finance_system.infrastructure.multitenancy.annotation.TenantDependent;
+
 @Data
 @Entity
 @Table(name = "doacoes")
+@TenantDependent
 public class Donation {
     
     @Id
@@ -23,9 +26,5 @@ public class Donation {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;  // Enum: PIX, DINHEIRO, CARTAO
 
-    private String category;  // Ex: "Missões", "Construção"
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "church_id", nullable = false)
-    private Church church;
+    private DonationCategory category;  // Ex: "Missões", "Construção"
 }
