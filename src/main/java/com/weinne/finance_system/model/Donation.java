@@ -26,5 +26,6 @@ public class Donation {
     @Enumerated(EnumType.STRING)
     private PaymentMethod paymentMethod;  // Enum: PIX, DINHEIRO, CARTAO
 
+    @Enumerated(EnumType.STRING)
     private DonationCategory category;  // Ex: "Missões", "Construção"
 }

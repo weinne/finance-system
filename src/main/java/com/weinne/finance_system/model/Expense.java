@@ -25,6 +25,7 @@ public class Expense {
 
     private String supplier;  // Ex: "Construtora ABC"
 
+    @Enumerated(EnumType.STRING)
     private ExpenseCategory category;
 
     @Enumerated(EnumType.STRING)

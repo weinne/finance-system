@@ -69,21 +69,18 @@ public class HibernateConfig {
         LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource);
         em.setPackagesToScan("com.weinne.finance_system.model");
-        em.setPersistenceUnitName("tenant-persistence-unit");
-        
+
         HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-        vendorAdapter.setGenerateDdl(true);
-        vendorAdapter.setShowSql(true);
-        vendorAdapter.setDatabasePlatform("org.hibernate.dialect.PostgreSQLDialect");
+        vendorAdapter.setGenerateDdl(true); // Habilita geração de DDL
+        vendorAdapter.setShowSql(true);     // Mostra SQL no console
         em.setJpaVendorAdapter(vendorAdapter);
 
         Map<String, Object> properties = new HashMap<>();
         properties.put("hibernate.multiTenancy", "SCHEMA");
         properties.put("hibernate.multi_tenant_connection_provider", schemaPerTenantConnectionProvider);
         properties.put("hibernate.tenant_identifier_resolver", tenantResolver);
-        properties.put("hibernate.default_schema", "public");
-        properties.put("hibernate.hbm2ddl.auto", "update");
-        properties.put("hibernate.physical_naming_strategy", "org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl");
+        properties.put("hibernate.hbm2ddl.auto", "update"); // Adiciona essa linha
+        properties.put("hibernate.default_schema", "public"); // Define schema padrão
 
         em.setJpaPropertyMap(properties);
         return em;

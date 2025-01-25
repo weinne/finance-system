@@ -45,8 +45,6 @@ public class AuthService {
         // 3. Setar contexto do tenant para criar igreja e usuário
         TenantContext.setCurrentTenant(church.getSchemaName());
 
-        
-
         return RegisterResponse.builder()
             .churchId(church.getId())
             .churchName(church.getName())

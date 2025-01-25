@@ -7,10 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import com.weinne.finance_system.infrastructure.multitenancy.context.TenantContext;
-
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-
+import com.weinne.finance_system.security.JwtService;
 import lombok.RequiredArgsConstructor;
 
 import jakarta.servlet.FilterChain;
@@ -54,7 +51,7 @@ import jakarta.servlet.http.HttpServletResponse;
 @RequiredArgsConstructor
 public class TenantFilter implements Filter {
 
-    private final EntityManagerFactory emf;
+    private final JwtService jwtService;
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) 
@@ -68,28 +65,22 @@ public class TenantFilter implements Filter {
             return;
         }
 
-        String tenantId = req.getHeader("X-Tenant-ID");
-        if (tenantId == null) {
-            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Tenant ID não informado");
+        String authHeader = req.getHeader("Authorization");
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_UNAUTHORIZED);
             return;
         }
 
-        EntityManager em = emf.createEntityManager();
-        try {
-            boolean exists = em.createQuery("SELECT COUNT(c) > 0 FROM Church c WHERE c.schemaName = :schema")
-                .setParameter("schema", tenantId)
-                .getSingleResult().equals(1L);
+        String jwt = authHeader.substring(7);
+        String tenantId = jwtService.extractTenantId(jwt);
 
-            if (!exists) {
-                ((HttpServletResponse) response).sendError(HttpServletResponse.SC_NOT_FOUND, "Tenant não encontrado");
-                return;
-            }
-
-            TenantContext.setCurrentTenant(tenantId);
-            chain.doFilter(request, response);
-        } finally {
-            em.close();
-            TenantContext.clear();
+        if (tenantId == null) {
+            ((HttpServletResponse) response).sendError(HttpServletResponse.SC_BAD_REQUEST, "Tenant ID não encontrado no token");
+            return;
         }
+
+        TenantContext.setCurrentTenant(tenantId);
+        chain.doFilter(request, response);
+        TenantContext.clear();
     }
 }

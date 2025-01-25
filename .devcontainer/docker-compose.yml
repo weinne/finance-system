@@ -25,6 +25,8 @@ services:
       - postgres-data:/var/lib/postgresql/data
     networks:
       - church-network
+    ports:
+      - "5432:5432"  # Adicione esta linha para expor a porta
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U admin -d church_finance"]
       interval: 5s

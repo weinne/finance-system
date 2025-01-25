@@ -7,7 +7,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Entity
-@Table
+@Table(schema="public")
 @Data
 @TenantClassEntity(schemaNameField = "schemaName", tenantIdField = "id")
 public class Church implements TenantAware<Long> {
